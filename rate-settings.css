@@ -1,0 +1,6 @@
+.rate-settings{border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 25px;background:var(--soft)}
+.rate-settings summary{cursor:pointer;font-weight:600;color:var(--ink);font-size:14px}.rate-settings-body{display:grid;gap:16px;margin-top:20px;min-width:0}
+.rate-settings label{display:grid;gap:8px;font-size:12px;color:var(--muted)}.rate-settings select,.rate-settings input[type=password]{width:100%;max-width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);padding:12px;font:inherit;min-height:44px}
+.rate-settings p{font-size:12px;color:var(--muted);line-height:1.6}.rate-settings a{text-decoration:underline;text-underline-offset:3px}.rate-settings .key-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.rate-settings .key-actions .button{font-size:12px;min-height:40px;padding:8px 14px}
+.rate-settings label.auto-refresh{display:flex;align-items:center;gap:10px;line-height:1.5}.auto-refresh input{width:16px;height:16px;flex:none;accent-color:var(--ink)}
+.rate,.history small,.footnote{overflow-wrap:anywhere}

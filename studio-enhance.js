@@ -3,10 +3,10 @@
   const UI = window.ToolUI;
   const app = document.body.dataset.app;
   const translations = {
-    pl: {live:'NA ŻYWO', rate:'KURS REFERENCYJNY', words:'SŁOWA', chars:'ZNAKI', reading:'CZAS CZYTANIA', report:'Pobierz raport', reportTitle:'Raport przeliczenia walut', generated:'Wygenerowano', conversion:'Bieżące przeliczenie', history:'Historia obliczeń', amount:'Kwota', result:'Wynik', rateDate:'Data kursu', offline:'Zapisany kurs offline — może być nieaktualny', source:'Źródło kursów: Frankfurter', disclaimer:'Wynik nie uwzględnia prowizji ani spreadu.', noHistory:'Brak zapisanej historii.'},
-    en: {live:'LIVE PREVIEW', rate:'REFERENCE RATE', words:'WORDS', chars:'CHARACTERS', reading:'READING TIME', report:'Download report', reportTitle:'Currency conversion report', generated:'Generated', conversion:'Current conversion', history:'Calculation history', amount:'Amount', result:'Result', rateDate:'Rate date', offline:'Cached offline rate — may be outdated', source:'Rate source: Frankfurter', disclaimer:'Results exclude fees and spreads.', noHistory:'No saved history.'},
-    de: {live:'LIVE-VORSCHAU', rate:'REFERENZKURS', words:'WÖRTER', chars:'ZEICHEN', reading:'LESEZEIT', report:'Bericht herunterladen', reportTitle:'Währungsbericht', generated:'Erstellt', conversion:'Aktuelle Umrechnung', history:'Berechnungsverlauf', amount:'Betrag', result:'Ergebnis', rateDate:'Kursdatum', offline:'Gespeicherter Offline-Kurs — möglicherweise veraltet', source:'Kursquelle: Frankfurter', disclaimer:'Ergebnisse ohne Gebühren und Spreads.', noHistory:'Kein gespeicherter Verlauf.'},
-    uk: {live:'ЖИВИЙ ПЕРЕГЛЯД', rate:'ДОВІДКОВИЙ КУРС', words:'СЛОВА', chars:'СИМВОЛИ', reading:'ЧАС ЧИТАННЯ', report:'Завантажити звіт', reportTitle:'Звіт про конвертацію валют', generated:'Створено', conversion:'Поточна конвертація', history:'Історія обчислень', amount:'Сума', result:'Результат', rateDate:'Дата курсу', offline:'Збережений офлайн-курс — може бути застарілим', source:'Джерело курсів: Frankfurter', disclaimer:'Результат не враховує комісії та спред.', noHistory:'Збереженої історії немає.'}
+    pl: {live:'NA ŻYWO', rate:'KURS WALUTOWY', words:'SŁOWA', chars:'ZNAKI', reading:'CZAS CZYTANIA', report:'Pobierz raport', reportTitle:'Raport przeliczenia walut', generated:'Wygenerowano', conversion:'Bieżące przeliczenie', history:'Historia obliczeń', amount:'Kwota', result:'Wynik', rateDate:'Data kursu', offline:'Zapisany kurs offline — może być nieaktualny', source:'Źródło kursów: Frankfurter', disclaimer:'Wynik nie uwzględnia prowizji ani spreadu.', noHistory:'Brak zapisanej historii.'},
+    en: {live:'LIVE PREVIEW', rate:'EXCHANGE RATE', words:'WORDS', chars:'CHARACTERS', reading:'READING TIME', report:'Download report', reportTitle:'Currency conversion report', generated:'Generated', conversion:'Current conversion', history:'Calculation history', amount:'Amount', result:'Result', rateDate:'Rate date', offline:'Cached offline rate — may be outdated', source:'Rate source: Frankfurter', disclaimer:'Results exclude fees and spreads.', noHistory:'No saved history.'},
+    de: {live:'LIVE-VORSCHAU', rate:'WECHSELKURS', words:'WÖRTER', chars:'ZEICHEN', reading:'LESEZEIT', report:'Bericht herunterladen', reportTitle:'Währungsbericht', generated:'Erstellt', conversion:'Aktuelle Umrechnung', history:'Berechnungsverlauf', amount:'Betrag', result:'Ergebnis', rateDate:'Kursdatum', offline:'Gespeicherter Offline-Kurs — möglicherweise veraltet', source:'Kursquelle: Frankfurter', disclaimer:'Ergebnisse ohne Gebühren und Spreads.', noHistory:'Kein gespeicherter Verlauf.'},
+    uk: {live:'ЖИВИЙ ПЕРЕГЛЯД', rate:'ВАЛЮТНИЙ КУРС', words:'СЛОВА', chars:'СИМВОЛИ', reading:'ЧАС ЧИТАННЯ', report:'Завантажити звіт', reportTitle:'Звіт про конвертацію валют', generated:'Створено', conversion:'Поточна конвертація', history:'Історія обчислень', amount:'Сума', result:'Результат', rateDate:'Дата курсу', offline:'Збережений офлайн-курс — може бути застарілим', source:'Джерело курсів: Frankfurter', disclaimer:'Результат не враховує комісії та спред.', noHistory:'Збереженої історії немає.'}
   };
   const t = key => (translations[UI.lang] || translations.pl)[key];
 
@@ -69,7 +69,7 @@
     document.getElementById('from').addEventListener('change', renderVisual);
     document.getElementById('to').addEventListener('change', renderVisual);
   } else {
-    for (const id of ('stat-characters', 'stat-reading')) {
+    for (const id of ['stat-characters', 'stat-reading']) {
       visualObserver.observe(document.getElementById(id), {childList:true, characterData:true, subtree:true});
     }
   }
@@ -85,6 +85,8 @@
     refreshReport();
     reportButton.addEventListener('click', () => {
       if (reportButton.disabled) return;
+      const snapshot = window.CurrencyStudio.getSnapshot();
+      if (!snapshot) return;
       const from = document.getElementById('from').value;
       const to = document.getElementById('to').value;
       const amount = window.PortfolioTools.parseAmount(document.getElementById('amount').value);
@@ -93,12 +95,13 @@
       const saved = UI.storage.get('nr-currency-history', []);
       const history = Array.isArray(saved) ? saved.filter(item => item && Number.isFinite(item.amount) && Number.isFinite(item.result)).slice(0,10) : [];
       const lines = [t('reportTitle'), '='.repeat(36), `${t('generated')}: ${new Intl.DateTimeFormat(UI.locale, {dateStyle:'long',timeStyle:'short'}).format(new Date())}`, '', t('conversion'), `${t('amount')}: ${formattedAmount} ${from}`, `${t('result')}: ${output.textContent.trim()}`, document.getElementById('rate').textContent.trim()];
-      if (document.getElementById('status').textContent.trim() === UI.t('cached')) lines.push(t('offline'));
+      if (snapshot.cached) lines.push(window.CurrencyStudio.t('cached'));
       lines.push('', t('history'));
       if (history.length) {
-        for (const item of history) lines.push(`${item.amount} ${item.from} → ${item.result} ${item.to} | ${t('rateDate')}: ${item.date}${item.cached ? ' · ' + t('offline') : ''}`);
+        for (const item of history) lines.push(`${item.amount} ${item.from} → ${item.result} ${item.to} | ${window.CurrencyStudio.describe(item)}`);
       } else lines.push(t('noHistory'));
-      lines.push('', t('source'), t('disclaimer'), 'https://frankfurter.dev/');
+      lines.push('', `${window.CurrencyStudio.t('sourceLabel')}: ${window.CurrencyStudio.sourceName(snapshot)}`, t('disclaimer'));
+      if (snapshot.source !== 'identity') lines.push(window.CurrencyRates.sources[snapshot.source].url);
       UI.download(`currency-report-${new Date().toISOString().slice(0,10)}.txt`, lines.join('\n') + '\n');
     });
     window.addEventListener('tool-languagechange', () => { reportButton.querySelector('span').textContent = t('report'); });

@@ -17,8 +17,6 @@ header{position:relative;z-index:5;background:color-mix(in srgb,var(--panel) 92%
 main{max-width:1200px;padding:56px 30px 85px}
 .studio-hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(250px,.7fr);gap:36px;align-items:center;margin:0 0 42px}
 .studio-hero-copy{min-width:0}
-.studio-kicker{display:inline-flex;align-items:center;gap:8px;margin:0 0 16px;padding:7px 11px;border:1px solid var(--line);border-radius:40px;background:var(--panel);color:var(--muted);font:700 10px Consolas,monospace;letter-spacing:1.3px;text-transform:uppercase}
-.studio-kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:#61aa82;box-shadow:0 0 0 3px #61aa8222}
 .studio-hero .eyebrow{margin-bottom:18px;text-transform:uppercase}
 .studio-hero h1{max-width:690px;margin:0 0 16px;font-size:clamp(38px,5.2vw,66px);line-height:1.05;letter-spacing:-2.5px;font-weight:760}
 .studio-hero .intro{max-width:600px;margin:0;color:var(--muted);font-size:15px;line-height:1.8}

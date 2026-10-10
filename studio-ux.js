@@ -4,10 +4,10 @@
   const UI = window.ToolUI;
   const app = document.body.dataset.app;
   const words = {
-    pl: { local: 'Czas lokalny', quick: 'Szybka kwota', pairs: 'Popularne pary', copy: 'Kopiuj wynik', copied: 'Wynik skopiowany', copyFailed: 'Nie udało się skopiować wyniku', goal: 'Cel słów', progress: 'Wykonano', focus: 'Tryb skupienia', leave: 'Pokaż statystyki', heroCurrency: 'KURSY REFERENCYJNE', heroText: 'ANALIZA W PRZEGLĄDARCE' },
-    en: { local: 'Local time', quick: 'Quick amount', pairs: 'Popular pairs', copy: 'Copy result', copied: 'Result copied', copyFailed: 'Could not copy the result', goal: 'Word goal', progress: 'Completed', focus: 'Focus mode', leave: 'Show statistics', heroCurrency: 'REFERENCE RATES', heroText: 'IN-BROWSER ANALYSIS' },
-    de: { local: 'Ortszeit', quick: 'Schneller Betrag', pairs: 'Beliebte Paare', copy: 'Ergebnis kopieren', copied: 'Ergebnis kopiert', copyFailed: 'Ergebnis konnte nicht kopiert werden', goal: 'Wortziel', progress: 'Erreicht', focus: 'Fokusmodus', leave: 'Statistik anzeigen', heroCurrency: 'REFERENZKURSE', heroText: 'ANALYSE IM BROWSER' },
-    uk: { local: 'Місцевий час', quick: 'Швидка сума', pairs: 'Популярні пари', copy: 'Копіювати результат', copied: 'Результат скопійовано', copyFailed: 'Не вдалося скопіювати результат', goal: 'Мета за словами', progress: 'Виконано', focus: 'Режим зосередження', leave: 'Показати статистику', heroCurrency: 'ДОВІДКОВІ КУРСИ', heroText: 'АНАЛІЗ У БРАУЗЕРІ' }
+    pl: { local: 'Czas lokalny', quick: 'Szybka kwota', pairs: 'Popularne pary', copy: 'Kopiuj wynik', copied: 'Wynik skopiowany', copyFailed: 'Nie udało się skopiować wyniku', goal: 'Cel słów', progress: 'Wykonano', focus: 'Tryb skupienia', leave: 'Pokaż statystyki' },
+    en: { local: 'Local time', quick: 'Quick amount', pairs: 'Popular pairs', copy: 'Copy result', copied: 'Result copied', copyFailed: 'Could not copy the result', goal: 'Word goal', progress: 'Completed', focus: 'Focus mode', leave: 'Show statistics' },
+    de: { local: 'Ortszeit', quick: 'Schneller Betrag', pairs: 'Beliebte Paare', copy: 'Ergebnis kopieren', copied: 'Ergebnis kopiert', copyFailed: 'Ergebnis konnte nicht kopiert werden', goal: 'Wortziel', progress: 'Erreicht', focus: 'Fokusmodus', leave: 'Statistik anzeigen' },
+    uk: { local: 'Місцевий час', quick: 'Швидка сума', pairs: 'Популярні пари', copy: 'Копіювати результат', copied: 'Результат скопійовано', copyFailed: 'Не вдалося скопіювати результат', goal: 'Мета за словами', progress: 'Виконано', focus: 'Режим зосередження', leave: 'Показати статистику' }
   };
   const t = key => (words[UI.lang] || words.pl)[key];
 
@@ -24,15 +24,13 @@
   hero.className = 'studio-hero';
   const heroCopy = document.createElement('div');
   heroCopy.className = 'studio-hero-copy';
-  const kicker = document.createElement('span');
-  kicker.className = 'studio-kicker';
   const eyebrow = main.querySelector('.eyebrow');
   const title = main.querySelector('h1');
   const intro = main.querySelector('.intro');
   const clock = document.createElement('time');
   clock.className = 'studio-clock';
   clock.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span></span>';
-  heroCopy.append(kicker, eyebrow, title, intro, clock);
+  heroCopy.append(eyebrow, title, intro, clock);
   const visual = document.createElement('div');
   visual.className = 'studio-visual';
   visual.setAttribute('aria-hidden', 'true');
@@ -156,7 +154,6 @@
   }
 
   function translateExtras() {
-    kicker.textContent = t(app === 'currency' ? 'heroCurrency' : 'heroText');
     updateClock();
     updateExtras();
   }
